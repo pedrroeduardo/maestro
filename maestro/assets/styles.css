@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@source "./templates/**/*.html";
+@source "./ui/**/*.html";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, Inter, sans-serif;
+  --color-brand-500: oklch(0.72 0.11 178);
+}

@@ -33,3 +33,6 @@ Thumbs.db
 .tox/
 .pytest_cache/
 htmlcov/
+
+# Node modules
+node_modules/

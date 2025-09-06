@@ -10,6 +10,7 @@ python-dotenv = "*"
 django-environ = "*"
 
 [dev-packages]
+nodeenv = "*"
 
 [requires]
 python_version = "3.12"
