@@ -1,4 +1,5 @@
-<aside aria-label="Sidebar"
+<aside class="transition-all duration-300 ease-in-out"
+       aria-label="Sidebar"
        x-data="{
                 collapsed: false,
                 workspaceOpen: true,
@@ -6,25 +7,25 @@
                 showTooltip: false,
                 tooltipText: '',
                 tooltipSubmenu: false,
-                submenuItems: []
+                submenuItems: [],
+                tooltipTimer: null
             }"
        :class="collapsed ? 'w-16' : 'w-72'">
     <nav class="bg-white h-screen shadow-lg transition-all duration-300 ease-in-out flex flex-col">
+        <!-- Sidebar Header -->
         <div class="p-4 border-b border-gray-200 flex items-center justify-between">
             <div class="flex items-center space-x-3" x-show="!collapsed" x-transition>
                 <span class="font-semibold text-gray-800">Maestro</span>
             </div>
-            <div class="w-8 h-8 bg-black text-white rounded-lg flex items-center justify-center" x-show="collapsed">
-                M
-            </div>
             <button
                     @click="collapsed = !collapsed"
-                    class="p-1 hover:bg-gray-100 rounded transition-colors"
+                    class="hover:bg-gray-100 p-2 rounded transition-colors"
             >
-                <span>{% icon "chevron-left" class="text-gray-500 text-sm" :class="collapsed && 'rotate-180'" %}</span>
+                <span>{% icon "chevron-left" class="flex items-center space-x-3 text-gray-500 rounded-lg cursor-pointer transition-colors" :class="collapsed && 'rotate-180'" %}</span>
             </button>
         </div>
 
+        <!-- Search Bar -->
         <div class="p-4 border-b border-gray-200">
             <div class="relative" x-show="!collapsed" x-transition>
                 {% icon "search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" %}
@@ -43,7 +44,10 @@
                 <i class="fas fa-search text-gray-500 text-sm"></i>
             </div>
         </div>
+
+        <!-- Navigation Links -->
         <ul class="flex-1 p-4 space-y-1">
+            <!-- Dashboard -->
             <li class="flex items-center space-x-3 p-2 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors"
                 @mouseenter="collapsed && (showTooltip = true, tooltipText = 'Dashboard')"
                 @mouseleave="showTooltip = false"
@@ -51,6 +55,68 @@
                 <i class="fas fa-th-large text-gray-500 w-5"></i>
                 <span x-show="!collapsed" x-transition class="text-gray-700">Dashboard</span>
             </li>
+
+            <!-- Workspace with Submenu -->
+            <li class="relative">
+                <div
+                        class="flex items-center justify-between p-2 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors"
+                        @click="collapsed ? (tooltipSubmenu = !tooltipSubmenu, submenuItems = ['Overview', 'Settings', 'Members', 'Integrations']) : (workspaceOpen = !workspaceOpen)"
+                        @mouseenter="
+                            if (collapsed) {
+                                clearTimeout(tooltipTimer);
+                                showTooltip = true;
+                                tooltipText = 'Workspace';
+                                tooltipSubmenu = true;
+                                submenuItems = ['Overview', 'Settings', 'Members', 'Integrations'];
+                            }
+                        "
+                        @mouseleave="
+                            if (collapsed) {
+                                tooltipTimer = setTimeout(() => {
+                                    showTooltip = false;
+                                    tooltipSubmenu = false;
+                                }, 200);
+                            }
+                        "
+                >
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-briefcase text-gray-500 w-5"></i>
+                        <span x-show="!collapsed" x-transition class="text-gray-700">Workspace</span>
+                    </div>
+                    <i x-show="!collapsed" class="fas fa-chevron-down text-gray-400 text-sm transition-transform"
+                       :class="workspaceOpen && 'rotate-180'"></i>
+                </div>
+
+                <!-- Workspace Submenu (Expanded) -->
+                <div x-show="!collapsed && workspaceOpen" x-transition class="ml-8 mt-1 space-y-1">
+                    <div class="p-2 hover:bg-gray-100 rounded-lg cursor-pointer text-gray-600 text-sm">Overview</div>
+                    <div class="p-2 hover:bg-gray-100 rounded-lg cursor-pointer text-gray-600 text-sm bg-gray-100">
+                        Settings
+                    </div>
+                    <div class="p-2 hover:bg-gray-100 rounded-lg cursor-pointer text-gray-600 text-sm">Members</div>
+                    <div class="p-2 hover:bg-gray-100 rounded-lg cursor-pointer text-gray-600 text-sm">Integrations
+                    </div>
+                </div>
+
+                <!-- Added popup submenu for collapsed state with hover delay -->
+                <div x-show="collapsed && tooltipSubmenu"
+                     x-transition
+                     @mouseenter="clearTimeout(tooltipTimer)"
+                     @mouseleave="tooltipSubmenu = false; showTooltip = false"
+                     class="absolute left-12 top-0 bg-white shadow-lg rounded-lg border p-1 z-50 min-w-[140px]">
+                    <template x-for="item in submenuItems">
+                        <div class="p-2 hover:bg-gray-100 rounded cursor-pointer text-sm text-gray-700" x-text="item"></div>
+                    </template>
+                </div>
+            </li>
         </ul>
+
+        <!-- Added tooltip for collapsed state -->
+        <div x-show="collapsed && showTooltip && !tooltipSubmenu"
+             x-transition
+             class="fixed bg-gray-800 text-white px-2 py-1 rounded text-sm z-50 pointer-events-none"
+             :style="`left: 4rem; top: ${$el.getBoundingClientRect().top}px`"
+             x-text="tooltipText">
+        </div>
     </nav>
 </aside>
