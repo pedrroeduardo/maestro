@@ -57,7 +57,7 @@ def do_icon(parser, token):
     bits = token.split_contents()
     tag_name = bits.pop(0)
     if not bits:
-        raise template.TemplateSyntaxError(f'"{tag_name}" requer ao menos o nome do ícone.')
+        raise template.TemplateSyntaxError(f'"{tag_name}" require at least the name of the icon.')
 
     name_expr = parser.compile_filter(bits.pop(0))
 
@@ -65,7 +65,7 @@ def do_icon(parser, token):
     for bit in bits:
         if "=" not in bit:
             raise template.TemplateSyntaxError(
-                f'Argumento inválido em {tag_name}: "{bit}". Use key="value".'
+                f'Invalid Argument {tag_name}: "{bit}". Use key="value".'
             )
         key, value = bit.split("=", 1)
         attrs[key] = parser.compile_filter(value)
