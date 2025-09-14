@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* caminhos RELATIVOS a static/assets/styles.css */
 @source "../../modules/**/*.html";
 @source "../../modules/**/*.py";
 @source "../js/**/*.js";

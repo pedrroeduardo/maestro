@@ -121,7 +121,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
-
 STATICFILES_DIRS = [BASE_DIR / 'maestro' / 'static']
 
 # Default primary key field type
@@ -130,3 +129,5 @@ STATICFILES_DIRS = [BASE_DIR / 'maestro' / 'static']
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
+LOGIN_URL = "/login/"
