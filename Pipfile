@@ -8,6 +8,7 @@ django = ">=5.0"
 whitenoise = "*"
 python-dotenv = "*"
 django-environ = "*"
+lucide = {extras = ["django"], version = "*"}
 
 [dev-packages]
 nodeenv = "*"

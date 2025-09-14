@@ -1,39 +1,53 @@
 {% load static %}
+
 <!doctype html>
 <html lang="pt-br">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Maestro{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Maestro{% endblock %}</title>
 
-  {% block head_css %}
-    <link rel="stylesheet" href="{% static 'css/app.css' %}">
-  {% endblock %}
-  {% block head_extra %}{% endblock %}
+    {% block head_css %}
+        <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    {% endblock %}
+    {% block head_extra %}{% endblock %}
 </head>
-<body class="min-h-screen bg-gray-50 text-gray-900">
+<body class="min-h-screen flex flex-col">
+<div class="flex flex-1">
+{% block sidebar %}
+    {% include "core/_sidebar.html" %}
+{% endblock %}
 
-  <header class="bg-white border-b">
-    <div class="max-w-6xl mx-auto p-4 flex items-center justify-between">
-      <a href="/" class="font-semibold">Maestro</a>
-      {% block header_actions %}{% endblock %}
+<main id="main" class="flex-1">
+    <div class="flex-1 flex flex-col">
+        {% include "core/_messages.html" %}
+
+        {% block header %}
+            <div class="bg-white border-b p-4">
+                <h2 class="text-2xl font-bold">Header Example</h2>
+            </div>
+        {% endblock %}
+
+        {% block content %}
+            <div class="flex flex-1">
+                <main class="flex-1 p-6 bg-gray-100">
+                    <p>Content Example...</p>
+                </main>
+            </div>
+        {% endblock %}
     </div>
-  </header>
+</main>
+</div>
 
-  <main id="main" class="max-w-6xl mx-auto p-4">
-    {% include "core/_messages.html" %}
-    {% block content %}{% endblock %}
-  </main>
-
-  <footer class="max-w-6xl mx-auto p-4 text-sm text-gray-500">
+<footer class="p-4 text-sm text-gray-500">
     {% block footer %}Maestro{% endblock %}
-  </footer>
+</footer>
 
-  {% block scripts_headless %}
+{% block scripts_headless %}
     <script src="https://unpkg.com/htmx.org@1.9.12" defer></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
-  {% endblock %}
-  <script src="{% static 'js/app.js' %}" defer></script>
-  {% block scripts %}{% endblock %}
+{% endblock %}
+<script src="{% static 'js/app.js' %}" defer></script>
+{% block scripts %}{% endblock %}
 </body>
 </html>
