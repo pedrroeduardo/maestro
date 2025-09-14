@@ -36,3 +36,5 @@ htmlcov/
 
 # Node modules
 node_modules/
+
+maestro/static/css/app.css

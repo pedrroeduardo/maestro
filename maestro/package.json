@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev:css": "tailwindcss -i ./assets/styles.css -o ./static/css/app.css --watch",
     "build:css": "tailwindcss -i ./assets/styles.css -o ./static/css/app.css --minify"
   },

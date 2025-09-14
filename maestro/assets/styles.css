@@ -1,9 +1,6 @@
 @import "tailwindcss";
 
-@source "./templates/**/*.html";
-@source "./ui/**/*.html";
-
-@theme {
-  --font-sans: ui-sans-serif, system-ui, Inter, sans-serif;
-  --color-brand-500: oklch(0.72 0.11 178);
-}
+/* caminhos RELATIVOS a static/assets/styles.css */
+@source "../../modules/**/*.html";
+@source "../../modules/**/*.py";
+@source "../js/**/*.js";

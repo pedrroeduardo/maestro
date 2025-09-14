@@ -1,0 +1,23 @@
+{% if messages %}
+  <div class="space-y-2 mb-4" role="status" aria-live="polite">
+    {% for message in messages %}
+      {% if message.tags %}
+        {% with tag=message.tags %}
+          <div class="p-3 rounded border
+                      {% if 'debug' in tag %} bg-gray-50 border-gray-200 text-gray-700
+                      {% elif 'info' in tag %} bg-blue-50 border-blue-200 text-blue-800
+                      {% elif 'success' in tag %} bg-green-50 border-green-200 text-green-800
+                      {% elif 'warning' in tag %} bg-yellow-50 border-yellow-200 text-yellow-900
+                      {% elif 'error' in tag %} bg-red-50 border-red-200 text-red-800
+                      {% else %} bg-white border-gray-200 text-gray-800 {% endif %}">
+            {{ message }}
+          </div>
+        {% endwith %}
+      {% else %}
+        <div class="p-3 rounded border bg-white border-gray-200 text-gray-800">
+          {{ message }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}
