@@ -44,7 +44,7 @@ class IconNode(template.Node):
         return mark_safe(html)
 
 
-@register.tag(name="icon")
+@register.tag(name="icons")
 def do_icon(parser, token):
     """
     Sintax:
