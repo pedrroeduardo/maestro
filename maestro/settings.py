@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sniplates',
     'modules.core',
     'modules.users'
 ]
@@ -68,7 +69,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            'builtins': ['modules.core.templatetags.icons'],
+            'builtins': ['modules.core.templatetags.icons', 'sniplates.templatetags.sniplates'],
         },
     },
 ]
