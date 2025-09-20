@@ -9,7 +9,8 @@
 
     <li class="rounded-lg transition-colors">
         <a href="{{ href }}"
-           class="flex items-center space-x-3 p-2 hover:bg-gray-100 cursor-pointer"
+           class="flex items-center space-x-3 p-2 hover:bg-gray-100 cursor-pointer rounded-lg
+                  {% if request.path == href %} bg-gray-100 {% endif %}"
            @mouseenter="collapsed && (showTooltip = true, tooltipText = '{{ label }}')"
            @mouseleave="showTooltip = false"
         >
@@ -17,4 +18,78 @@
             <span x-show="!collapsed" x-transition class="text-gray-700">{{ label }}</span>
         </a>
     </li>
+{% endblock %}
+
+{% block nav_item_with_subnav %}
+    {#  Renders a navigation item (<li>) with a submenu, with:                                          #}
+    {#      • label (string)       – the text displayed in the menu                                     #}
+    {#      • icon  (string)       – the FontAwesome icon class (e.g. "fas fa-home")                    #}
+    {#      • submenu_items (list) – a list of strings representing submenu item labels                 #}
+    {#                                                                                                  #}
+    {#      Example:                                                                                    #}
+    {#         {% widget "widgets:nav_item_with_subnav"                                                 #}
+    {#                    label="Workspace"                                                             #}
+    {#                    icon="fas fa-briefcase"                                                       #}
+    {#                    submenu_items=submenu_list %}                                                 #}
+
+    <li class="relative">
+        <div
+                x-data = "{
+                            submenuItems: {{ submenu_items|safe }},
+                            workspaceOpen: true,
+                            settingsOpen: false,
+                            showTooltip: false,
+                            tooltipSubmenu: false,
+                            tooltipTimer: null
+                          }"
+                class="flex items-center justify-between p-2 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors"
+                @click="collapsed ? (tooltipSubmenu = !tooltipSubmenu) : (workspaceOpen = !workspaceOpen)"
+                @mouseenter="
+                            if (collapsed) {
+                                clearTimeout(tooltipTimer);
+                                showTooltip = true;
+                                tooltipText = {{ label }};
+                                tooltipSubmenu = true;
+                            }
+                        "
+                @mouseleave="
+                            if (collapsed) {
+                                tooltipTimer = setTimeout(() => {
+                                    showTooltip = false;
+                                    tooltipSubmenu = false;
+                                }, 200);
+                            }
+                        "
+        >
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-briefcase text-gray-500 w-5"></i>
+                <span x-show="!collapsed" x-transition class="text-gray-700">{{ label }}</span>
+            </div>
+            <span x-show="!collapsed" :class="workspaceOpen && 'rotate-180'">{% icons "chevron-down" class="text-gray-400 text-sm transition-transform" %}</span>
+
+        </div>
+
+        <!-- Workspace Submenu (Expanded) -->
+        <div x-show="!collapsed && workspaceOpen" x-transition class="ml-8 mt-1 space-y-1">
+            <div class="p-2 hover:bg-gray-100 rounded-lg cursor-pointer text-gray-600 text-sm">Overview</div>
+            <div class="p-2 hover:bg-gray-100 rounded-lg cursor-pointer text-gray-600 text-sm bg-gray-100">
+                Settings
+            </div>
+            <div class="p-2 hover:bg-gray-100 rounded-lg cursor-pointer text-gray-600 text-sm">Members</div>
+            <div class="p-2 hover:bg-gray-100 rounded-lg cursor-pointer text-gray-600 text-sm">Integrations
+            </div>
+        </div>
+
+        <!-- Added popup submenu for collapsed state with hover delay -->
+        <div x-show="collapsed && tooltipSubmenu"
+             x-transition
+             @mouseenter="clearTimeout(tooltipTimer)"
+             @mouseleave="tooltipSubmenu = false; showTooltip = false"
+             class="absolute left-12 top-0 bg-white shadow-lg rounded-lg border p-1 z-50 min-w-[140px]">
+            <template x-for="item in submenuItems">
+                <div class="p-2 hover:bg-gray-100 rounded cursor-pointer text-sm text-gray-700" x-text="item"></div>
+            </template>
+        </div>
+    </li>
+
 {% endblock %}

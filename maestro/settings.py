@@ -69,7 +69,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            'builtins': ['modules.core.templatetags.icons', 'sniplates.templatetags.sniplates'],
+            'builtins': [
+                'modules.core.templatetags.icons',
+                'modules.core.templatetags.json_loads',
+                'sniplates.templatetags.sniplates'
+            ],
         },
     },
 ]
