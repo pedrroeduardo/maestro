@@ -1,3 +1,5 @@
+{% load_widgets widgets="core/widgets/_sidebar_widgets.html" %}
+
 <aside class="transition-all duration-300 ease-in-out"
        aria-label="Sidebar"
        x-data="{
@@ -21,14 +23,14 @@
                     @click="collapsed = !collapsed"
                     class="hover:bg-gray-100 p-2 rounded transition-colors"
             >
-                <span>{% icon "chevron-left" class="flex items-center space-x-3 text-gray-500 rounded-lg cursor-pointer transition-colors" :class="collapsed && 'rotate-180'" %}</span>
+                <span>{% icons "chevron-left" class="flex items-center space-x-3 text-gray-500 rounded-lg cursor-pointer transition-colors" :class="collapsed && 'rotate-180'" %}</span>
             </button>
         </div>
 
         <!-- Search Bar -->
         <div class="p-4 border-b border-gray-200">
             <div class="relative" x-show="!collapsed" x-transition>
-                {% icon "search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" %}
+                {% icons "search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" %}
                 <input
                         type="text"
                         placeholder="Search"
@@ -48,13 +50,8 @@
         <!-- Navigation Links -->
         <ul class="flex-1 p-4 space-y-1">
             <!-- Dashboard -->
-            <li class="flex items-center space-x-3 p-2 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors"
-                @mouseenter="collapsed && (showTooltip = true, tooltipText = 'Dashboard')"
-                @mouseleave="showTooltip = false"
-            >
-                <i class="fas fa-th-large text-gray-500 w-5"></i>
-                <span x-show="!collapsed" x-transition class="text-gray-700">Dashboard</span>
-            </li>
+            {% url "demo" as url %}
+            {% widget "widgets:nav_item" label="Dashboard" icon="th-large" href=url %}
 
             <!-- Workspace with Submenu -->
             <li class="relative">

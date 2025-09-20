@@ -1,0 +1,20 @@
+{% block nav_item %}
+    {#  Renders a single navigation item (<li>) with:                                                   #}
+    {#      • label (string)  – the text displayed in the menu                                          #}
+    {#      • href  (string)  – the target URL (use {% url ... as var %} or pass a string)              #}
+    {#      • icon  (string)  – the FontAwesome icon class (e.g. "fas fa-home")                         #}
+    {#                                                                                                  #}
+    {#      Example:                                                                                    #}
+    {#         {% widget "widgets:nav_item" label="Dashboard" href=demo_url icon="fas fa-th-large" %}   #}
+
+    <li class="rounded-lg transition-colors">
+        <a href="{{ href }}"
+           class="flex items-center space-x-3 p-2 hover:bg-gray-100 cursor-pointer"
+           @mouseenter="collapsed && (showTooltip = true, tooltipText = '{{ label }}')"
+           @mouseleave="showTooltip = false"
+        >
+            {% icons icon class="text-gray-500 w-5" %}
+            <span x-show="!collapsed" x-transition class="text-gray-700">{{ label }}</span>
+        </a>
+    </li>
+{% endblock %}
