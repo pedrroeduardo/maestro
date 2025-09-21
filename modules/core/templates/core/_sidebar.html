@@ -60,8 +60,9 @@
             {% if user.is_authenticated %}
                 <p>Authenticated :D</p>
             {% else %}
-                <div class="text-center" x-show="!collapsed" x-transition>
-                    <a href="{% url 'login' %}" class="btn-primary">Sign In</a>
+                <div class="text-center" x-transition>
+                    <a x-show="!collapsed" href="{% url 'login' %}" class="btn-primary">Sign In</a>
+                    <a x-show="collapsed" href="{% url 'login' %}" class="bg-primary rounded-lg p-2 text-white">{% icons "right-to-bracket" %}</a>
                 </div>
             {% endif %}
         </div>
