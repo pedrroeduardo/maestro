@@ -71,7 +71,7 @@ TEMPLATES = [
             ],
             'builtins': [
                 'modules.core.templatetags.icons',
-                'modules.core.templatetags.json_loads',
+                'modules.core.templatetags.to_dict',
                 'sniplates.templatetags.sniplates'
             ],
         },
