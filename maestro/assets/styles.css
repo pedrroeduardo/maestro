@@ -10,4 +10,9 @@
     --color-background: #F8F8F8;
     --color-foreground: #292826;
     --color-muted: #E8E8E8;
+    --color-foreground-secondary: #666666;
+}
+
+.btn-primary {
+  @apply w-full py-2 rounded-lg font-medium text-white transition-all hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-primary block;
 }

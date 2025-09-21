@@ -16,9 +16,6 @@
         <!-- Sidebar Header -->
         <div class="p-4 border-b border-gray-200 flex items-center justify-between">
             <div class="flex items-center space-x-3" x-show="!collapsed" x-transition>
-                <div class="p-1 flex items-center justify-center bg-primary rounded-lg">
-                    {% icons "maestro-logo" custom=True class="w-9" %}
-                </div>
                 <span class="text-xl font-semibold text-foreground">Maestro</span>
             </div>
             <button
@@ -61,5 +58,16 @@
             {% widget "widgets:nav_item_with_subnav" label="Teste" icon="briefcase" submenu_items="{'Teste': 'oi'}"|to_dict %}
             {% widget "widgets:nav_item_with_subnav" label="Ola" icon="briefcase" submenu_items="{'kkkkkkk': 'oi'}"|to_dict %}
         </ul>
+
+        <div class="p-4 border-t border-gray-200 mt-auto bg-gray-50">
+            {% if user.is_authenticated %}
+                <p>Authenticated :D</p>
+            {% else %}
+                <div class="text-center" x-show="!collapsed" x-transition>
+                    <a href="{% url 'login' %}" class="btn-primary">Sign In</a>
+                </div>
+            {% endif %}
+        </div>
+
     </nav>
 </aside>
