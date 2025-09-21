@@ -3,3 +3,11 @@
 @source "../../modules/**/*.html";
 @source "../../modules/**/*.py";
 @source "../js/**/*.js";
+
+@theme {
+    --color-primary: #AC50D3;
+    --color-secondary: #2F3A27;
+    --color-background: #F8F8F8;
+    --color-foreground: #292826;
+    --color-muted: #E8E8E8;
+}
