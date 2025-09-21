@@ -5,9 +5,6 @@ from modules.core.models.audit_fields_mixin import AuditFieldsMixin
 class CustomUser(AbstractUser, AuditFieldsMixin):
     email = models.EmailField(unique=True)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
-
     address = models.CharField(
         max_length=50,
         null=True,

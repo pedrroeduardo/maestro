@@ -1,14 +1,65 @@
 {% extends "core/base.html" %}
 
+{% block sidebar %}{% endblock %}
+
+{% block header %}{% endblock %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-  <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
-    <h1 class="text-2xl font-bold mb-6">Login</h1>
-    <form method="post" class="space-y-4">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Login</button>
-    </form>
-  </div>
-{% endblock %}}
+    <div class="w-full max-w-md mx-auto mt-10 p-8 bg-white border-muted shadow-lg rounded-lg">
+        <div class="text-center mb-8">
+            <div class="w-15 mx-auto p-1 flex items-center justify-center bg-primary rounded-2xl">
+                {% icons "maestro-logo" custom=True class="w-9" %}
+            </div>
+            <h2 class="text-2xl font-bold mb-2 text-foreground">
+                Welcome back
+            </h2>
+            <p class="text-sm text-foreground-secondary">
+                Please log in to access your account
+            </p>
+        </div>
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            <div>
+                <label class="block text-sm font-medium mb-2 text-foreground">Username</label>
+                <div class="relative">
+                    {% icons "user" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary" %}
+                    <label>
+                        <input type="text"
+                               name="username"
+                               class="w-full pl-10 pr-4 py-2 rounded-lg border focus:outline-none focus:ring-1 transition-all"
+                               placeholder="Enter your username"
+                               required
+                        />
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-2 text-foreground">Password</label>
+                <div class="relative flex items-center" x-data="{ showPassword: false }">
+
+                    {% icons "lock" class="absolute left-3 text-foreground-secondary" %}
+
+                    <input :type="showPassword ? 'text' : 'password'"
+                           name="password"
+                           class="w-full pl-10 pr-12 py-2 rounded-lg border focus:outline-none focus:ring-1 transition-all"
+                           placeholder="Enter your password"
+                           required/>
+
+                    <button type="button"
+                            @click="showPassword = !showPassword"
+                            class="absolute right-3 text-foreground-secondary">
+                        <span x-show="!showPassword">{% icons "eye" %}</span>
+                        <span x-show="showPassword">{% icons "eye-slash" %}</span>
+                    </button>
+                </div>
+            </div>
+            <button type="submit" class="w-full btn-primary">Login</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
