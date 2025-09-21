@@ -67,8 +67,7 @@
                 {% icons icon class="text-gray-500 w-5" %}
                 <span x-show="!collapsed" x-transition class="text-gray-700">{{ label }}</span>
             </div>
-            <span x-show="!collapsed" :class="sublistOpen && 'rotate-180'"
-                  @click="sublistOpen = !sublistOpen">
+            <span x-show="!collapsed" :class="sublistOpen && 'rotate-180'">
                 {% icons "chevron-down" class="text-gray-400 text-sm transition-transform" %}
             </span>
 
