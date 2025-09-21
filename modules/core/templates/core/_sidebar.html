@@ -12,46 +12,51 @@
                 tooltipTimer: null
             }"
        :class="collapsed ? 'w-16' : 'w-72'">
-    <nav class="bg-white h-screen shadow-lg transition-all duration-300 ease-in-out flex flex-col">
+    <nav class="bg-background h-screen shadow-lg transition-all duration-300 ease-in-out flex flex-col">
         <!-- Sidebar Header -->
         <div class="p-4 border-b border-gray-200 flex items-center justify-between">
             <div class="flex items-center space-x-3" x-show="!collapsed" x-transition>
-                {% icons "maestro-logo" custom=True class="w-9" %}
-                <span class="font-semibold text-gray-800">Maestro</span>
+                <div class="p-1 flex items-center justify-center bg-primary rounded-lg">
+                    {% icons "maestro-logo" custom=True class="w-9" %}
+                </div>
+                <span class="text-xl font-semibold text-foreground">Maestro</span>
             </div>
             <button
                     @click="collapsed = !collapsed"
                     class="hover:bg-gray-100 p-2 rounded transition-colors"
             >
-                <span>{% icons "chevron-left" class="flex items-center space-x-3 text-gray-500 rounded-lg cursor-pointer transition-colors" :class="collapsed && 'rotate-180'" %}</span>
+                <span>{% icons "chevron-left" class="flex items-center space-x-3 text-foreground rounded-lg cursor-pointer transition-colors" :class="collapsed && 'rotate-180'" %}</span>
             </button>
         </div>
 
         <!-- Search Bar -->
         <div class="p-4 border-b border-gray-200">
             <div class="relative" x-show="!collapsed" x-transition>
-                {% icons "search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" %}
+                {% icons "search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground text-sm" %}
                 <input
                         type="text"
                         placeholder="Search"
-                        class="w-full pl-10 pr-12 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="w-full pl-10 pr-12 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 >
             </div>
             <div
-                    class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer"
+                    class="w-8 h-8 flex items-center justify-center hover:bg-muted rounded cursor-pointer"
                     x-show="collapsed"
                     @mouseenter="showTooltip = true; tooltipText = 'Search'"
                     @mouseleave="showTooltip = false"
             >
-                <i class="fas fa-search text-gray-500 text-sm"></i>
+                <i class="fas fa-search text-foreground text-sm"></i>
             </div>
         </div>
 
         <!-- Navigation Links -->
         <ul class="flex-1 p-4 space-y-1">
             <!-- Dashboard -->
-            {% url "demo" as url %}
-            {% widget "widgets:nav_item" label="Dashboard" icon="th-large" href=url %}
+            {% url "demo" as url_dashboard %}
+            {% widget "widgets:nav_item" label="Dashboard" icon="th-large" href=url_dashboard %}
+
+            {% url "login" as url_login %}
+            {% widget "widgets:nav_item" label="Login" icon="th-large" href=url_login %}
 
             {% widget "widgets:nav_item_with_subnav" label="Teste" icon="briefcase" submenu_items="{'Teste': 'oi'}"|to_dict %}
             {% widget "widgets:nav_item_with_subnav" label="Ola" icon="briefcase" submenu_items="{'kkkkkkk': 'oi'}"|to_dict %}
