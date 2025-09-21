@@ -52,9 +52,6 @@
             {% url "demo" as url_dashboard %}
             {% widget "widgets:nav_item" label="Dashboard" icon="th-large" href=url_dashboard %}
 
-            {% url "login" as url_login %}
-            {% widget "widgets:nav_item" label="Login" icon="th-large" href=url_login %}
-
             {% widget "widgets:nav_item_with_subnav" label="Teste" icon="briefcase" submenu_items="{'Teste': 'oi'}"|to_dict %}
             {% widget "widgets:nav_item_with_subnav" label="Ola" icon="briefcase" submenu_items="{'kkkkkkk': 'oi'}"|to_dict %}
         </ul>
