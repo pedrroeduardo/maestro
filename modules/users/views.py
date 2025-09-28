@@ -1,4 +1,4 @@
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 
 from django.contrib import messages
 
@@ -22,3 +22,8 @@ class CustomLoginView(LoginView):
         return context
 
 login_view = CustomLoginView.as_view()
+
+class CustomLogoutView(LogoutView):
+    next_page = 'login'
+
+logout_view = CustomLogoutView.as_view()
