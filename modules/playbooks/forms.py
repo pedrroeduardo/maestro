@@ -50,3 +50,34 @@ class PlaybookForm(forms.ModelForm):
     class Meta:
         model = Playbook
         fields = ["name", "description", "content", "is_public", "visible_to", "tags"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.is_bound:
+            is_public_now = self.data.get("is_public")
+            is_public_now = str(is_public_now).lower() in ("1", "true", "on", "yes")
+        else:
+            is_public_now = bool(
+                self.initial.get("is_public",
+                                 getattr(self.instance, "is_public", False))
+            )
+
+        self.fields["visible_to"].required = not is_public_now
+        if not is_public_now:
+            self.fields["visible_to"].widget.attrs["required"] = "required"
+        else:
+            self.fields["visible_to"].widget.attrs.pop("required", None)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        is_public = cleaned_data.get("is_public")
+        visible_to = cleaned_data.get("visible_to")
+
+        if not is_public and (not visible_to or visible_to.count() == 0):
+            self.add_error(
+                "visible_to",
+                "This field is required when the playbook is not public. Please select at least one group."
+            )
+
+        return cleaned_data

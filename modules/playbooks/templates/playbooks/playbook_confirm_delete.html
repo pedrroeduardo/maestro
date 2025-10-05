@@ -1,0 +1,12 @@
+{% extends "core/widgets/_modal_widgets.html" %}
+
+{% block content %}
+    <p class="my-4">Are you sure you want to delete the playbook "<strong>{{ playbook.name }}</strong>"? This action cannot be undone.</p>
+    <form id="delete-form-{{ playbook.id }}" method="post" action="{% url 'playbook_delete' playbook.id %}">
+        {% csrf_token %}
+        <div class="flex justify-end space-x-2">
+            <button type="button" class="btn btn-outline btn-md" @click="openModal = false;">Cancel</button>
+            <button form="delete-form-{{ playbook.id }}" type="submit" class="btn btn-primary btn-md bg-red-600">Delete</button>
+        </div>
+    </form>
+{% endblock %}

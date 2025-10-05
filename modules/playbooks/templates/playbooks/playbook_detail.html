@@ -1,20 +1,26 @@
 {% extends "core/base.html" %}
 
-{% block title %}Create Playbook{% endblock %}
+{% block title %}{% if form.instance.pk %}Edit{% else %}Create{% endif %} Playbook{% endblock %}
 
 {% block header %}
     <div class="bg-background border-b border-gray-200 p-5">
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-foreground">Create Playbook</h1>
-                <p class="text-foreground-secondary mt-1">Define the details of your new playbook</p>
+                <h1 class="text-2xl font-bold text-foreground">
+                    {% if form.instance.pk %}Edit{% else %}Create{% endif %} Playbook
+                </h1>
+                <p class="text-foreground-secondary mt-1">
+                    {% if form.instance.pk %}
+                        Modify the details of your playbook
+                    {% else %}
+                        Define the details of your new playbook
+                    {% endif %}
+                </p>
             </div>
-            <div class="flex items-center gap-3">
-                <a href="{% url 'playbook_list' %}" class="btn-outline">
-                    {% icons "arrow-left" %}
-                    <span>Back to Playbooks</span>
-                </a>
-            </div>
+            <a href="{% url 'playbook_list' %}" class="btn btn-outline btn-md">
+                {% icons "arrow-left" %}
+                <span>Back to Playbooks</span>
+            </a>
         </div>
     </div>
 {% endblock %}
@@ -39,7 +45,7 @@
                         <h2 class="text-lg font-medium mb-4">Basic Informations</h2>
 
                         <div class="space-y-4">
-                            <div x-data="{ playbookName: '' }">
+                            <div x-data="{ playbookName: '{{ form.name.value|default_if_none:''|escapejs }}' }">
                                 {{ form.name|as_crispy_field }}
                                 <div class="flex justify-between mt-1">
                                     <span class="text-xs text-muted-foreground ml-auto"
@@ -119,13 +125,17 @@
                             <div>
                                 {% icons "user-group" %}
                             </div>
+                            {# TODO: Add Visible to Groups after #}
                         </div>
                     </div>
 
                     <div class="border-t border-gray-300">
-                        <button class="btn-primary mt-5">
-                            {# TODO: Add Visible to Groups after #}
-                            Create Playbook
+                        <button class="btn btn-primary btn-md mt-5">
+                            {% if form.instance.pk %}
+                                Save Changes
+                            {% else %}
+                                Create Playbook
+                            {% endif %}
                         </button>
                     </div>
                 </form>

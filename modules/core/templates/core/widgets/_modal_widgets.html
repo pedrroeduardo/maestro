@@ -1,10 +1,23 @@
 {% block modal %}
+    {#  Renders a modal overlay component controlled by Alpine.js.                                     #}
+    {#                                                                                                 #}
+    {#  PARAMETERS:                                                                                    #}
+    {#      • openModal (boolean, Alpine variable) – defines whether the modal is visible              #}
+    {#      • icon (string)              – name of the icon to render in the header                    #}
+    {#      • title (string)             – modal main title displayed in the header                    #}
+    {#      • sub_title (string, optional) – optional subtitle displayed below the title               #}
+    {#      • content (HTML block)       – the inner HTML content rendered inside the modal body       #}
+    {#                                                                                                 #}
+    {#                                                                                                 #}
+    {#                                                                                                 #}
+    {#  DEPENDENCIES:                                                                                  #}
+    {#      • Must be used inside a parent element that defines `x-data="{ openModal: false }"`,       #}
+    {#        otherwise the modal’s open/close behavior will not work.                                 #}
+
     <div x-show="openModal"
          @click="openModal = false"
-         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+         class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
          x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0">
@@ -26,11 +39,11 @@
                 </button>
             </div>
 
-            <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
-                {{ content }}
+            <div class="overflow-y-auto max-h-[calc(90vh-140px)] bg-white p-6 text-foreground">
+                {% block content %}
+                    {{ content }}
+                {% endblock %}
             </div>
         </div>
     </div>
 {% endblock %}
-
-{# Work in Progress, i think it should already work... never tested #}
