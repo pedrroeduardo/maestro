@@ -1,0 +1,75 @@
+{% extends "core/base.html" %}
+
+{% block title %}Playbook List{% endblock %}
+
+{% block header %}
+    <div class="bg-background border-b border-gray-200 p-5">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-foreground">Playbook List</h1>
+                <p class="text-foreground-secondary mt-1">Manage and organize your playbooks</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <a class="btn-primary" href="{% url 'playbook_create' %}">
+                    {% icons "plus" %}
+                    <span>Create Playbook</span>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="flex flex-1">
+        <main class="flex-1 p-6 bg-background">
+            {% for playbook in playbooks %} {% comment %} TODO: FIX {% endcomment %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Playbook ID</th>
+                        <th>Playbook Name</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ playbook.id }}</td>
+                        <td>{{ playbook.name }}</td>
+                        <td>
+                            <a href="{% url 'playbook_detail' playbook.id %}" class="btn-outline">
+                                {% icons "eye" %}
+                                <span>View</span>
+                            </a>
+                            <a href="{% url 'playbook_detail' playbook.id %}">
+                </tbody>
+                </table>
+                <span>
+                    Playbook Name: {{ playbook.name }}
+                </span>
+            {% empty %}
+                <div class="flex flex-col items-center justify-center h-full text-center max-w-md mx-auto">
+                    <div class="relative mb-8">
+                        <div class="w-24 h-24 bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl flex items-center justify-center">
+                            {% icons "book-open" class="text-foreground text-4xl" %}
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 mb-8">
+                        <h3 class="text-2xl font-bold text-foreground">Ready to create your first playbook?</h3>
+                        <p class="text-muted-foreground text-lg leading-relaxed">
+                            Transform your team's knowledge into structured, repeatable processes. Start building your
+                            playbook library today.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3 w-full">
+                        <a class="btn-primary w-full" href="{% url 'playbook_create' %}">
+                            {% icons "plus" %}
+                            <span>Create Playbook</span>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </main>
+    </div>
+{% endblock %}

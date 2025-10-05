@@ -1,0 +1,155 @@
+{% extends "core/base.html" %}
+
+{% block title %}Create Playbook{% endblock %}
+
+{% block header %}
+    <div class="bg-background border-b border-gray-200 p-5">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-foreground">Create Playbook</h1>
+                <p class="text-foreground-secondary mt-1">Define the details of your new playbook</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="{% url 'playbook_list' %}" class="btn-outline">
+                    {% icons "arrow-left" %}
+                    <span>Back to Playbooks</span>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block head_extra %}
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+    <!-- CodeMirror JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/yaml/yaml.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="flex flex-1">
+        <main class="flex-1 p-6 bg-muted">
+            <div class="p-6">
+                <form class="space-y-8" method="post">
+                    {% csrf_token %}
+
+                    <div class="bg-white shadow rounded-lg p-6">
+                        <h2 class="text-lg font-medium mb-4">Basic Informations</h2>
+
+                        <div class="space-y-4">
+                            <div x-data="{ playbookName: '' }">
+                                {{ form.name|as_crispy_field }}
+                                <div class="flex justify-between mt-1">
+                                    <span class="text-xs text-muted-foreground ml-auto"
+                                          x-text="playbookName.length + ' / 100'"></span>
+                                </div>
+                            </div>
+
+                            <div>
+                                {{ form.description|as_crispy_field }}
+                                {#                                <textarea id="description"#}
+                                {#                                       placeholder="Example: Steps to onboard a new employee"#}
+                                {#                                       class="w-full border border-muted rounded-lg px-4 py-2 focus:outline-none"#}
+                                {#                                ></textarea>#}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-semibold mb-4">Playbook Content</h2>
+                        </div>
+                        <div>
+                            {{ form.content|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow p-6"
+                         x-data="{ isPublic: {{ form.is_public.value|yesno:'true,false' }} }">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-semibold mb-4">Visibility Configuration</h2>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-lg">
+                            <div class="p-4">
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span x-show="isPublic">{% icons "globe" class="text-green-500 text-lg" %}</span>
+
+                                            <span x-show="!isPublic">{% icons "lock" class="text-orange-500 text-lg"%}</span>
+
+
+                                            <label for="is_public"
+                                                   class="font-medium text-gray-900 py-1"
+                                                   x-text="isPublic ? 'Public Playbook' : 'Private Playbook'">
+                                            </label>
+
+                                            <span class="text-xs px-2 rounded-full"
+                                                  :class="isPublic ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'"
+                                                  x-text="isPublic ? 'Public' : 'Private'">
+                                            </span>
+                                        </div>
+
+                                        <p class="text-sm text-gray-600"
+                                           x-text="isPublic
+                                                    ? 'All team members can view and use this playbook'
+                                                    : 'Only selected team members can access this playbook'">
+                                        </p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox"
+                                               x-model="isPublic"
+                                               name="is_public"
+                                               class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 rounded-full peer
+                                                    peer-checked:bg-primary
+                                                    after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                                                    after:bg-white after:border-gray-300 after:rounded-full after:h-5 after:w-5
+                                                    after:transition-all peer-checked:after:translate-x-full">
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div x-show="!isPublic" class="mt-5 bg-white border border-gray-200 rounded-lg p-4">
+                            <div>
+                                {% icons "user-group" %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-300">
+                        <button class="btn-primary mt-5">
+                            {# TODO: Add Visible to Groups after #}
+                            Create Playbook
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const textarea = document.getElementById('yaml-editor');
+
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: 'yaml',
+                theme: 'default',
+                lineNumbers: true,
+                lineWrapping: true,
+                indentUnit: 2,
+                tabSize: 2,
+                indentWithTabs: false
+            });
+
+            editor.setSize(null, 400);
+        });
+    </script>
+{% endblock %}
+
+{% block footer %}{% endblock %}

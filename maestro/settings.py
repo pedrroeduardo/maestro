@@ -42,8 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sniplates',
+    'crispy_forms',
+    'crispy_tailwind',
     'modules.core',
-    'modules.users'
+    'modules.users',
+    'modules.playbooks',
 ]
 
 MIDDLEWARE = [
@@ -72,7 +75,8 @@ TEMPLATES = [
             'builtins': [
                 'modules.core.templatetags.icons',
                 'modules.core.templatetags.to_dict',
-                'sniplates.templatetags.sniplates'
+                'sniplates.templatetags.sniplates',
+                'crispy_forms.templatetags.crispy_forms_tags',
             ],
         },
     },
@@ -139,3 +143,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_URL = "/login/"
 
 LOGIN_REDIRECT_URL = "/demo"
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+CRISPY_TEMPLATE_PACK = "tailwind"
+

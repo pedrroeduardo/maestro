@@ -9,6 +9,8 @@ whitenoise = "*"
 python-dotenv = "*"
 django-environ = "*"
 django-sniplates = "*"
+django-crispy-forms = "*"
+crispy-tailwind = "*"
 
 [dev-packages]
 nodeenv = "*"

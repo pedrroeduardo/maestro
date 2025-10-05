@@ -1,0 +1,36 @@
+{% block modal %}
+    <div x-show="openModal"
+         @click="openModal = false"
+         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0">
+        <div class="bg-card border border-border rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+            <div class="flex items-center justify-between p-6 border-b border-b-gray-200 bg-background">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
+                        {% icons icon class="w-5 h-5 text-primary" %}
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-foreground">{{ title }}</h2>
+                        {% if sub_title %}
+                            <p class="text-sm text-muted-foreground">{{ sub_title }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <button @click="openModal = false" class="text-foreground hover:text-red-600 transition-colors">
+                    {% icons "xmark" class="w-5 h-5" %}
+                </button>
+            </div>
+
+            <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
+                {{ content }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{# Work in Progress, i think it should already work... never tested #}

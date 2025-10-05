@@ -7,12 +7,36 @@
 @theme {
     --color-primary: #AC50D3;
     --color-secondary: #2F3A27;
-    --color-background: #F8F8F8;
+    --color-background: #ffffff;
     --color-foreground: #292826;
-    --color-muted: #E8E8E8;
+    --color-muted: #F8F8F8;
     --color-foreground-secondary: #666666;
 }
 
+label {
+    @apply block text-sm font-medium mb-2
+}
+
+table {
+    @apply w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400
+}
+
+thead {
+    @apply text-xs text-gray-700 uppercase bg-gray-50
+}
+
+th {
+    @apply px-6 py-3
+}
+
+tbody tr {
+    @apply bg-white border-b border-gray-200
+}
+
 .btn-primary {
-  @apply w-full py-2 rounded-lg font-medium text-white transition-all hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-primary block;
+  @apply p-2 rounded-lg font-medium text-white cursor-pointer transition-all hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-primary block;
+}
+
+.btn-outline {
+  @apply p-2 rounded-lg font-medium text-primary cursor-pointer transition-all hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 border-2 border-primary block;
 }
