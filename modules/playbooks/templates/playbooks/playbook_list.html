@@ -69,18 +69,15 @@
                                     <span>No tags</span>
                                 {% endif %}
                             </td>
-                            <td class="flex-inline">
+                            <td class="flex flex-inline">
                                 <a href="{% url 'playbook_update' playbook.id %}" class="btn btn-ghost btn-sm">
                                     {% icons "pen-to-square" %}
                                 </a>
-                                <div>
-                                    <a class="btn btn-ghost btn-sm" @click="openModal = true">
-                                        {% icons "trash" %}
-                                    </a>
-
-                                    {% include "playbooks/playbook_confirm_delete.html" with playbook=playbook icon="trash" title="Delete Playbook" %}
-                                </div>
+                                <a class="btn btn-ghost btn-sm" @click="openModal = true">
+                                    {% icons "trash" %}
+                                </a>
                             </td>
+                        {% include "playbooks/playbook_confirm_delete.html" with playbook=playbook icon="trash" title="Delete Playbook" %}
                         </tr>
                     {% endfor %}
                 </tbody>
