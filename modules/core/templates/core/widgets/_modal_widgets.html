@@ -14,7 +14,8 @@
     {#      • Must be used inside a parent element that defines `x-data="{ openModal: false }"`,       #}
     {#        otherwise the modal’s open/close behavior will not work.                                 #}
 
-    <div x-show="openModal"
+    <div x-cloak
+         x-show="openModal"
          @click="openModal = false"
          class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
          x-transition:enter="transition ease-out duration-300"

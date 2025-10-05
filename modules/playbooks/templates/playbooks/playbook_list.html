@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="flex flex-1" x-data="{ openModal: false }">
+    <div class="flex flex-1">
         <main class="flex-1 p-6 bg-background">
         {% if playbooks %}
             <table>
@@ -35,7 +35,7 @@
                 </thead>
                 <tbody>
                     {% for playbook in playbooks %}
-                        <tr>
+                        <tr x-data="{ openModal: false }">
                             <td>
                                 <a class="text-blue-600 underline" href="{% url 'playbook_update' playbook.id %}">
                                     {{ playbook.name }}
@@ -77,6 +77,7 @@
                                     <a class="btn btn-ghost btn-sm" @click="openModal = true">
                                         {% icons "trash" %}
                                     </a>
+
                                     {% include "playbooks/playbook_confirm_delete.html" with playbook=playbook icon="trash" title="Delete Playbook" %}
                                 </div>
                             </td>
