@@ -6,6 +6,8 @@
 
 {% block title %}{{ title }}{% endblock %}
 
+{% block margin_sidebar %}{% endblock %}
+
 {% block content %}
     <div class="w-full max-w-md mx-auto mt-10 p-8 bg-white border-muted shadow-lg rounded-lg">
         <div class="text-center mb-8">
@@ -56,7 +58,7 @@
                     </button>
                 </div>
             </div>
-            <button type="submit" class="w-full btn-primary">Login</button>
+            <button type="submit" class="w-full btn btn-primary btn-md">Login</button>
         </form>
     </div>
 {% endblock %}
