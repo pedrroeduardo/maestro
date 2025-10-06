@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="flex flex-1">
+    <div class="flex flex-1" x-data="{ openModal: false }">
         <main class="flex-1 p-6 bg-background">
         {% if playbooks %}
             <table>
@@ -35,7 +35,7 @@
                 </thead>
                 <tbody>
                     {% for playbook in playbooks %}
-                        <tr x-data="{ openModal: false }">
+                        <tr>
                             <td>
                                 <a class="text-blue-600 underline" href="{% url 'playbook_update' playbook.id %}">
                                     {{ playbook.name }}
