@@ -41,17 +41,25 @@
                     showTooltip: false,
                     tooltipSubmenu: false,
                     tooltipTimer: null,
-                    submenuItems: {{ submenu_items|safe }}
+                    submenuItems: {{ submenu_items|safe }},
+
+                    tooltipPosition: { top: 0, left: 0 },
+                    updateTooltipPosition(el) {
+                        const rect = el.getBoundingClientRect();
+                        this.tooltipPosition = {
+                            top: rect.top,
+                            left: rect.right + 8
+                        };
+                    }
                    }"
     >
         <div
                 class="flex items-center justify-between p-2 hover:bg-muted rounded-lg cursor-pointer transition-colors"
-                @click="collapsed ? (tooltipSubmenu = !tooltipSubmenu) : (sublistOpen = !sublistOpen)"
+                @click="!collapsed && (sublistOpen = !sublistOpen)"
                 @mouseenter="
                             if (collapsed) {
                                 clearTimeout(tooltipTimer);
-                                showTooltip = true;
-                                tooltipText = {{ label }};
+                                updateTooltipPosition($el);
                                 tooltipSubmenu = true;
                             }
                         "
@@ -89,7 +97,8 @@
              x-transition
              @mouseenter="clearTimeout(tooltipTimer)"
              @mouseleave="tooltipSubmenu = false; showTooltip = false"
-             class="absolute left-12 top-0 bg-background shadow-lg rounded-lg border p-1 z-[9999] min-w-[140px]">
+             class="fixed left-12 top-0 bg-background shadow-lg rounded-lg border p-1 z-[9999] min-w-[140px]"
+             :style="`top: ${tooltipPosition.top}px; left: ${tooltipPosition.left}px;`">
 
             <template x-for="(href, label) in submenuItems" :key="label">
                 <a class="block p-1 hover:bg-muted rounded cursor-pointer text-sm text-foreground"
