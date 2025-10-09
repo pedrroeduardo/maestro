@@ -36,7 +36,7 @@
 
 {% block content %}
     <div class="flex flex-1">
-        <main class="flex-1 p-6 bg-muted">
+        <main class="flex-1 p-6 bg-muted" x-data="{ openModal: false }">
             <div class="p-6">
                 <form class="space-y-8" method="post">
                     {% csrf_token %}
@@ -131,8 +131,8 @@
 
                     <div class="border-t border-gray-300">
                         {% if form.instance.pk %}
-                            <button>
-                                <a href="{% url 'playbook_delete' form.instance.pk %}" class="btn btn-outline btn-md mt-5">
+                            <button type="button">
+                                <a @click="openModal = true" class="btn btn-outline btn-md mt-5">
                                     Delete Playbook
                                 </a>
                             </button>
@@ -147,6 +147,7 @@
                     </div>
                 </form>
             </div>
+        {% include "playbooks/playbook_confirm_delete.html" with playbook=playbook icon="trash" title="Delete Playbook" %}
         </main>
     </div>
 
