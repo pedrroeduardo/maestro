@@ -43,15 +43,15 @@
                             </td>
                             <td>{{ playbook.description|default:"No description" }}</td>
                             <td>
-                                {% if playbook.groups.all %}
-                                    {% for group in playbook.groups.all|slice:":2" %}
+                                {% if playbook.visible_to.all %}
+                                    {% for group in playbook.visible_to.all|slice:":2" %}
                                         <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-1">
                                             {{ group.name }}
                                         </span>
                                     {% endfor %}
-                                    {% if playbook.groups.length > 2 %}
+                                    {% if playbook.visible_to.length > 2 %}
                                         <span class="inline-block bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded-full">
-                                            +{{ playbook.groups.count|add:"-2" }} more
+                                            +{{ playbook.visible_to.count|add:"-2" }} more
                                         </span>
                                     {% endif %}
                                 {% else %}
