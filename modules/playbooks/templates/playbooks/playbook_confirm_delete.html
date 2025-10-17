@@ -2,7 +2,7 @@
 
 {% block content %}
     <p class="my-4">Are you sure you want to delete the playbook "<strong>{{ playbook.name }}</strong>"? This action cannot be undone.</p>
-    <form id="delete-form-{{ playbook.id }}" method="post" action="{% url 'playbook_delete' playbook.id %}">
+    <form id="delete-form-{{ playbook.id }}" method="post" action="{% url 'playbook_delete' playbook.pk %}">
         {% csrf_token %}
         <div class="flex justify-end space-x-2">
             <button type="button" class="btn btn-outline btn-md" @click="openModal = false;">Cancel</button>

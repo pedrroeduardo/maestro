@@ -1,0 +1,23 @@
+{% block hamburger-mobile %}
+    {#  Renders a hamburger for mobile                                                                 #}
+    {#                                                                                                 #}
+    {#  PARAMETERS:                                                                                    #}
+    {#      • sidebarOpenBoolean (boolean) – defines whether the modal is visible                      #}
+
+    <button @click="
+                sidebarOpen = {{ sidebarOpenBoolean|lower }};
+                if (shouldCenter === true){
+                    shouldCenter = false;
+                } else {
+                    setTimeout(() => {
+                        shouldCenter = true;
+                    }, 300);
+                }
+            "
+            class="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+    >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+    </button>
+{% endblock %}

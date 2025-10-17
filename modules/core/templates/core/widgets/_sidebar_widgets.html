@@ -7,16 +7,23 @@
     {#      Example:                                                                                    #}
     {#         {% widget "widgets:nav_item" label="Dashboard" href=demo_url icon="fas fa-th-large" %}   #}
 
-    <li class="rounded-lg transition-colors">
+    <li>
         <a href="{{ href }}"
-           class="flex items-center space-x-3 p-2 {% if request.path != href %} hover:bg-muted {% endif %} cursor-pointer rounded-lg
-              {% if request.path == href %} bg-primary text-white {% endif %}"
-           @mouseenter="collapsed && (showTooltip = true, tooltipText = '{{ label }}')"
-           @mouseleave="showTooltip = false"
+           class="flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+           :class="{ 'justify-center': shouldCenter }"
         >
-            <span class="w-5 text-foreground {% if request.path == href %} text-white {% endif %}">{% icons icon %}</span>
-            <span x-show="!collapsed" x-transition
-                  class="text-foreground {% if request.path == href %} text-white {% endif %}">{{ label }}</span>
+            {% icons icon %}
+            <span x-show="sidebarExpanded || sidebarOpen"
+                  x-transition:enter="transition-all ease-out duration-200 delay-75"
+                  x-transition:enter-start="opacity-0 -translate-x-2"
+                  x-transition:enter-end="opacity-100 translate-x-0"
+                  x-transition:leave="transition-all ease-in duration-150"
+                  x-transition:leave-start="opacity-100 translate-x-0"
+                  x-transition:leave-end="opacity-0 -translate-x-2"
+                  class="whitespace-nowrap"
+            >
+                {{ label }}
+            </span>
         </a>
     </li>
 {% endblock %}
@@ -35,77 +42,84 @@
     {#                    icon="briefcase"                                                       #}
     {#                    submenu_items="{'Example': 'url as variable'}"|to_dict %}                                                 #}
 
-    <li class="relative"
-        x-data="{
-                    sublistOpen: false,
-                    showTooltip: false,
-                    tooltipSubmenu: false,
-                    tooltipTimer: null,
-                    submenuItems: {{ submenu_items|safe }},
-
-                    tooltipPosition: { top: 0, left: 0 },
-                    updateTooltipPosition(el) {
-                        const rect = el.getBoundingClientRect();
-                        this.tooltipPosition = {
-                            top: rect.top,
-                            left: rect.right + 8
-                        };
+    <li class="relative" x-data="{ buttonRect: null, submenuItems: {{ submenu_items|safe }} }">
+        <button class="flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors duration-200 w-full"
+                :class="{
+                    'bg-gray-50': openMenu === '{{ label }}',
+                    'justify-center': shouldCenter
+                }"
+                @click="
+                    openMenu = openMenu === '{{ label }}' ? null : '{{ label }}';
+                    buttonRect = $el.getBoundingClientRect()
+                "
+                @mouseenter.self="
+                    if (!sidebarExpanded) {
+                        if (window.matchMedia('(hover: hover)').matches) {
+                            openMenu = '{{ label }}';
+                            buttonRect = $el.getBoundingClientRect()
+                        }
                     }
-                   }"
-    >
-        <div
-                class="flex items-center justify-between p-2 hover:bg-muted rounded-lg cursor-pointer transition-colors"
-                @click="!collapsed && (sublistOpen = !sublistOpen)"
-                @mouseenter="
-                            if (collapsed) {
-                                clearTimeout(tooltipTimer);
-                                updateTooltipPosition($el);
-                                tooltipSubmenu = true;
-                            }
-                        "
-                @mouseleave="
-                            if (collapsed) {
-                                tooltipTimer = setTimeout(() => {
-                                    showTooltip = false;
-                                    tooltipSubmenu = false;
-                                }, 200);
-                            }
-                        "
+                "
+                @mouseleave.self="
+                    if (!sidebarExpanded) {
+                        if (window.matchMedia('(hover: hover)').matches) {
+                            openMenu = null
+                        }
+                    }"
         >
-            <div class="flex items-center space-x-3">
-                {% icons icon class="text-foreground w-5" %}
-                <span x-show="!collapsed" x-transition class="text-foreground">{{ label }}</span>
-            </div>
-            <span x-show="!collapsed" :class="sublistOpen && 'rotate-180'">
-                {% icons "chevron-down" class="text-foreground text-sm transition-transform" %}
+            {% icons icon %}
+            <span x-show="sidebarExpanded || sidebarOpen"
+                  x-transition:enter="transition-all ease-out duration-200 delay-150"
+                  x-transition:enter-start="opacity-0 -translate-x-2"
+                  x-transition:enter-end="opacity-100 translate-x-0"
+                  x-transition:leave="transition-all ease-in duration-150"
+                  x-transition:leave-start="opacity-100 translate-x-0"
+                  x-transition:leave-end="opacity-0 -translate-x-2"
+                  class="whitespace-nowrap flex-1 text-left"
+            >
+                {{ label }}
             </span>
+            <svg x-show="sidebarExpanded || sidebarOpen"
+                 class="w-4 h-4 text-gray-400 transition-transform duration-200"
+                 :class="{ 'rotate-180': openMenu === '{{ label }}' }"
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24"
+            >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+        </button>
 
-        </div>
-
-        <!-- Workspace Submenu (Expanded) -->
-        <div x-show="!collapsed && sublistOpen" x-transition class="ml-8 mt-1 space-y-1">
+        <div x-show="openMenu === '{{ label }}'"
+             x-transition:enter="transition-all ease-out duration-200"
+             x-transition:enter-start="opacity-0 translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition-all ease-in duration-150"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 translate-y-2"
+             class="fixed bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden z-[60]"
+             :style="{
+                top: (sidebarExpanded || sidebarOpen) ? (buttonRect?.bottom + 4) + 'px' : buttonRect?.top + 'px',
+                left: (sidebarExpanded || sidebarOpen) ? buttonRect?.left + 'px' : (buttonRect?.right + 8) + 'px',
+                width: (sidebarExpanded || sidebarOpen) ? buttonRect?.width + 'px' : '224px'
+             }"
+             @mouseenter="
+                if (window.matchMedia('(hover: hover)').matches) {
+                    openMenu = '{{ label }}'
+                }"
+             @mouseleave="
+                if (!sidebarExpanded){
+                    if (window.matchMedia('(hover: hover)').matches) {
+                        openMenu = null
+                    }
+                }"
+             @click.outside="openMenu = null"
+        >
             <template x-for="(href, label) in submenuItems" :key="label">
-                <a :href="href"
-                   class="block p-2 hover:bg-muted rounded-lg cursor-pointer text-foreground text-sm"
-                   :class="window.location.pathname === href ? 'bg-primary text-white' : ''"
-                   x-text="label">
-                </a>
-            </template>
-        </div>
-
-        <div x-show="collapsed && tooltipSubmenu"
-             x-transition
-             @mouseenter="clearTimeout(tooltipTimer)"
-             @mouseleave="tooltipSubmenu = false; showTooltip = false"
-             class="fixed left-12 top-0 bg-background shadow-lg rounded-lg border p-1 z-[9999] min-w-[140px]"
-             :style="`top: ${tooltipPosition.top}px; left: ${tooltipPosition.left}px;`">
-
-            <template x-for="(href, label) in submenuItems" :key="label">
-                <a class="block p-1 hover:bg-muted rounded cursor-pointer text-sm text-foreground"
+                <a class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-200"
                    :href="href"
                    x-text="label"></a>
             </template>
         </div>
     </li>
-
 {% endblock %}

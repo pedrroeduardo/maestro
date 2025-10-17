@@ -1,64 +1,93 @@
 {% load static %}
-{% load icons %}
+{% load_widgets base="core/widgets/_base_widgets.html" %}
 
-<!doctype html>
-<html lang="pt-br">
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>{% block title %}Maestro{% endblock %}</title>
-
-    {% block head_css %}
+    {% block head-css %}
         <link rel="stylesheet" href="{% static 'css/app.css' %}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     {% endblock %}
-    {% block head_extra %}{% endblock %}
+    {% block head-extra %}{% endblock %}
 </head>
-<body class="h-screen flex flex-col bg-background">
-<div class="flex flex-1 h-full" x-data="{ collapsed: $persist(false) }">
+<body class="bg-gray-50 h-full"
+      x-data="{
+        sidebarOpen: false,
+        sidebarExpanded: false,
+        profileMenuOpen: false,
+        openMenu: null,
+        shouldCenter: true
+      }"
+>
+
+<!-- Mobile Overlay -->
 {% block sidebar %}
     {% include "core/_sidebar.html" %}
 {% endblock %}
 
-<main id="main" class="flex-1 transition-all duration-300 ease-in-out h-full"
-      {% block margin_sidebar %}:class="collapsed ? 'ml-16' : 'ml-72'"{% endblock %}>
-    <div class="flex-1 flex flex-col h-full">
-        {% include "core/_messages.html" %}
+<!-- Main Content -->
+<div class="ml-0 transition-all duration-300 ease-in-out h-full flex flex-col"
+     :class="{ 'lg:ml-16': !sidebarExpanded, 'lg:ml-64': sidebarExpanded }"
+>
+    <!-- Header -->
+    {% block header %}
+        <header class="bg-white border-b border-gray-200 sticky top-0 z-20">
+            <div class="flex items-center justify-between p-4">
+                {% widget "base:hamburger-mobile" sidebarOpenBoolean=True %}
 
-        {% block header %}
-        <div class="flex items-center justify-between">
-            <div>
-              <h1 class="text-2xl font-bold text-foreground">Header...</h1>
-              <p class="text-foreground-secondary mt-1">Description from Header...</p>
-            </div>
-            <div class="flex items-center gap-3">
-                <a class="btn-primary">
-                    {% icons "plus" %}
-                    <span>Button</span>
-                </a>
-            </div>
-          </div>
-    </div>
-        {% endblock %}
+                {% block header-content %}
+                    <div class="flex-col">
+                        {% block header-title %}<h1 class="text-xl font-bold text-gray-800">Minha Aplicação</h1>{% endblock %}
+                        {% block header-subtitle %}<p class="text-foreground-secondary mt-1">You can write whatever you want here :)</p>{% endblock %}
+                    </div>
+                {% endblock %}
 
-        {% block content %}
-            <div class="flex flex-1">
-                <main class="flex-1 p-6 bg-muted">
-                    <p>Content Example...</p>
-                </main>
+                {% block header-extra %}{% endblock %}
             </div>
-        {% endblock %}
-    </div>
-</main>
+        </header>
+    {% endblock %}
+
+    <!-- Content -->
+    {% block content %}
+        <main class="p-4 lg:p-8 flex-1 overflow-y-auto">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Bem-vindo!</h2>
+                <p class="text-gray-600 mb-6">
+                    Esta é uma sidebar responsiva com Alpine.js e Tailwind CSS.
+                </p>
+
+                <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div class="bg-white p-6 rounded-lg border border-gray-200">
+                        <h3 class="font-semibold text-gray-800 mb-2">Card 1</h3>
+                        <p class="text-gray-600 text-sm">Conteúdo do primeiro card</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-gray-200">
+                        <h3 class="font-semibold text-gray-800 mb-2">Card 2</h3>
+                        <p class="text-gray-600 text-sm">Conteúdo do segundo card</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-gray-200">
+                        <h3 class="font-semibold text-gray-800 mb-2">Card 3</h3>
+                        <p class="text-gray-600 text-sm">Conteúdo do terceiro card</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    {% endblock %}
+
+    <!-- Footer -->
+    {% block footer %}
+        <footer class="bg-white border-t border-gray-200">
+            <div class="p-4 text-center text-gray-600 text-sm">
+                © 2025 Minha Aplicação. Todos os direitos reservados.
+            </div>
+        </footer>
+    {% endblock %}
 </div>
 
-{% block footer %}
-    <footer class="p-4 text-sm text-foreground bg-muted">
-        Maestro
-    </footer>
-{% endblock %}
-
-{% block scripts_headless %}
+{% block scripts-headless %}
     {# HTMX #}
     <script src="https://unpkg.com/htmx.org@1.9.12" defer></script>
 
@@ -67,9 +96,9 @@
 
     {# Alpine Core #}
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
-
 {% endblock %}
-<script src="{% static 'js/app.js' %}" defer></script>
+
 {% block scripts %}{% endblock %}
+
 </body>
 </html>

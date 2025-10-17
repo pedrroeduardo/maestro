@@ -4,27 +4,27 @@
 
 {% load_widgets widgets="core/widgets/_modal_widgets.html" %}
 
-{% block header %}
-    <div class="bg-background border-b border-gray-200 p-5">
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-2xl font-bold text-foreground">Playbook List</h1>
-                <p class="text-foreground-secondary mt-1">Manage and organize your playbooks</p>
-            </div>
-            <a class="btn btn-primary btn-md" href="{% url 'playbook_create' %}">
-                {% icons "plus" %}
-                <span>Create Playbook</span>
-            </a>
-        </div>
-    </div>
+{% block header-title %}
+    <h1 class="text-2xl font-bold text-foreground">Playbook List</h1>
+{% endblock %}
+
+{% block header-subtitle %}
+    <p class="text-foreground-secondary mt-1">Manage and organize your playbooks</p>
+{% endblock %}
+
+{% block header-extra %}
+    <a class="btn btn-primary btn-md" href="{% url 'playbook_create' %}">
+        {% icons "plus" %}
+        <span>Create Playbook</span>
+    </a>
 {% endblock %}
 
 {% block content %}
     <div class="flex flex-1" x-data="{ openModal: false }">
         <main class="flex-1 p-6 bg-background">
-        {% if playbooks %}
-            <table>
-                <thead>
+            {% if playbooks %}
+                <table>
+                    <thead>
                     <tr>
                         <th>Playbook Name</th>
                         <th>Description</th>
@@ -32,8 +32,8 @@
                         <th>Tags</th>
                         <th>Actions</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     {% for playbook in playbooks %}
                         <tr>
                             <td>
@@ -77,34 +77,34 @@
                                     {% icons "trash" %}
                                 </a>
                             </td>
-                        {% include "playbooks/playbook_confirm_delete.html" with playbook=playbook icon="trash" title="Delete Playbook" %}
+                            {% include "playbooks/playbook_confirm_delete.html" with playbook=playbook icon="trash" title="Delete Playbook" %}
                         </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <div class="flex flex-col items-center justify-center h-full text-center max-w-md mx-auto">
-                <div class="relative mb-8">
-                    <div class="w-24 h-24 bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl flex items-center justify-center">
-                        {% icons "book-open" class="text-foreground text-4xl" %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="flex flex-col items-center justify-center h-full text-center max-w-md mx-auto">
+                    <div class="relative mb-8">
+                        <div class="w-24 h-24 bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl flex items-center justify-center">
+                            {% icons "book-open" class="text-foreground text-4xl" %}
+                        </div>
                     </div>
+
+                    <div class="space-y-4 mb-8">
+                        <h3 class="text-2xl font-bold text-foreground">Ready to create your first playbook?</h3>
+                        <p class="text-muted-foreground text-lg leading-relaxed">
+                            Transform your team's knowledge into structured, repeatable processes. Start building your
+                            playbook library today.
+                        </p>
+                    </div>
+
+                    <a class="btn btn-primary btn-md w-full" href="{% url 'playbook_create' %}">
+                        {% icons "plus" %}
+                        <span>Create Playbook</span>
+                    </a>
+
                 </div>
-
-                <div class="space-y-4 mb-8">
-                    <h3 class="text-2xl font-bold text-foreground">Ready to create your first playbook?</h3>
-                    <p class="text-muted-foreground text-lg leading-relaxed">
-                        Transform your team's knowledge into structured, repeatable processes. Start building your
-                        playbook library today.
-                    </p>
-                </div>
-
-                <a class="btn btn-primary btn-md w-full" href="{% url 'playbook_create' %}">
-                    {% icons "plus" %}
-                    <span>Create Playbook</span>
-                </a>
-
-            </div>
-        {% endif %}
+            {% endif %}
         </main>
     </div>
 {% endblock %}

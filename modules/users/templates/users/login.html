@@ -6,8 +6,6 @@
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block margin_sidebar %}{% endblock %}
-
 {% block content %}
     <div class="w-full max-w-md mx-auto mt-10 p-8 bg-white border-muted shadow-lg rounded-lg">
         <div class="text-center mb-8">
@@ -25,16 +23,13 @@
             {% csrf_token %}
             <div>
                 <label class="block text-sm font-medium mb-2 text-foreground">Username</label>
-                <div class="relative">
-                    {% icons "user" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-secondary" %}
-                    <label>
-                        <input type="text"
-                               name="username"
-                               class="w-full pl-10 pr-4 py-2 rounded-lg border focus:outline-none focus:ring-1 transition-all"
-                               placeholder="Enter your username"
-                               required
-                        />
-                    </label>
+                <div class="relative flex items-center">
+                    {% icons "user" class="absolute left-3 text-foreground-secondary" %}
+                    <input type="text"
+                           name="username"
+                           class="w-full pl-10 pr-12 py-2 rounded-lg border focus:outline-none focus:ring-1 transition-all"
+                           placeholder="Enter your username"
+                           required/>
                 </div>
             </div>
 
