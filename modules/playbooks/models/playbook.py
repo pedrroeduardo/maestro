@@ -2,6 +2,7 @@ from django.db import models
 
 from modules.core.models import AuditFieldsMixin, Tag
 from modules.core.models import Group
+from modules.users.models import CustomUser
 
 
 class Playbook(AuditFieldsMixin):
@@ -21,12 +22,12 @@ class Playbook(AuditFieldsMixin):
         blank=True,
     )
 
-    def is_visible_to(self, user):
+    def is_visible_to(self, user: CustomUser):
         if self.is_public:
             return True
         if not user.is_authenticated:
             return False
-        return self.visible_to.filter(id__in=user.groups.values_list("id", flat=True)).exists()
+        return self.visible_to.filter(id__in=user.get_user_group_ids()).exists()
 
     def __str__(self):
         return self.name
