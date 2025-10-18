@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from modules.core.models import GroupMember
 from modules.playbooks.forms import PlaybookForm
 from modules.playbooks.models.playbook import Playbook
 
@@ -23,8 +24,13 @@ class PlaybookListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = self.request.user
-        user_groups_ids = user.groups.values_list('id', flat=True)
-        return (Playbook.objects.all())
+        user_groups_ids = (GroupMember.objects
+                           .filter(user=user)
+                           .values_list('group_id', flat=True))
+        return (Playbook.objects
+                .filter(Q(is_public=True) | Q(visible_to__in=user_groups_ids))
+                .distinct()
+                .order_by('name'))
 
 playbook_list_view = PlaybookListView.as_view()
 
