@@ -24,10 +24,7 @@ class PlaybookListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         user_groups_ids = user.groups.values_list('id', flat=True)
-        return (Playbook.objects
-                .filter(Q(is_public=True) | Q(visible_to__in=user_groups_ids))
-                .distinct()
-                .order_by('name'))
+        return (Playbook.objects.all())
 
 playbook_list_view = PlaybookListView.as_view()
 

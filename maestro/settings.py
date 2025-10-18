@@ -147,3 +147,42 @@ LOGIN_REDIRECT_URL = "/demo"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
 
+
+"""
+Menu Registry
+
+This module defines the application's base sidebar menu (MENU_REGISTRY).
+The idea is to keep the entire menu structure centralized and declarative,
+so that we don’t need to repeat it in every view or template.
+
+- Top-level keys represent menu groups.
+- `icon` refers to the icon name (heroicon using templatetag "icons").
+- `submenu` is a dict where the key is the label and the value
+  is either a Django `url_name` or an absolute path.
+
+Example:
+{
+    "Workspace": {
+        "icon": "briefcase",
+        "submenu": {
+            "Playbook": "playbook_create",   # resolved with reverse()
+            "Help": "/help"                  # absolute paths are allowed
+        }
+    }
+    "Another Group": {
+        "icon": "bar_chart",
+        "submenu": {
+            "Item 1": "playbook_list",
+            "Item 2": "playbook_create",
+        }
+    }
+}
+"""
+
+MENU_REGISTRY = {
+    "Workspace": {
+        "icon": "briefcase",
+        "submenu": {"opaaa": "playbook_create"},
+    },
+}
+

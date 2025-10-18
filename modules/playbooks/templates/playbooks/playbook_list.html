@@ -49,7 +49,7 @@
                                             {{ group.name }}
                                         </span>
                                     {% endfor %}
-                                    {% if playbook.visible_to.length > 2 %}
+                                    {% if playbook.visible_to.all|length > 2 %}
                                         <span class="inline-block bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded-full">
                                             +{{ playbook.visible_to.count|add:"-2" }} more
                                         </span>
