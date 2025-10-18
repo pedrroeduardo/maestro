@@ -5,9 +5,8 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
-from modules.core.models import GroupMember
 from modules.playbooks.forms import PlaybookForm
 from modules.playbooks.models.playbook import Playbook
 
@@ -24,9 +23,7 @@ class PlaybookListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = self.request.user
-        user_groups_ids = (GroupMember.objects
-                           .filter(user=user)
-                           .values_list('group_id', flat=True))
+        user_groups_ids = user.get_user_group_ids()
         return (Playbook.objects
                 .filter(Q(is_public=True) | Q(visible_to__in=user_groups_ids))
                 .distinct()
@@ -47,7 +44,7 @@ class PlaybookUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_queryset(self):
         user = self.request.user
-        user_groups_ids = user.groups.values_list('id', flat=True)
+        user_groups_ids = user.get_user_group_ids()
         return Playbook.objects.filter(Q(is_public=True) | Q(visible_to__in=user_groups_ids)).distinct()
 
     def get_object(self, queryset=None):

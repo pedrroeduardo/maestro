@@ -28,5 +28,8 @@ class CustomUser(AbstractUser, AuditFieldsMixin):
     language = models.CharField(max_length=50, blank=True, null=True)
     timezone = models.CharField(max_length=50, blank=True, null=True)
 
+    def get_user_group_ids(self):
+        return self.maestro_groups.values_list('id', flat=True)
+
     def __str__(self):
         return self.email
