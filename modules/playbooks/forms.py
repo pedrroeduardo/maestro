@@ -65,7 +65,7 @@ class PlaybookForm(forms.ModelForm):
 
         self.fields["visible_to"].required = not is_public_now
         if not is_public_now:
-            self.fields["visible_to"].widget.attrs["required"] = "required"
+            self.fields["visible_to"].required = False
         else:
             self.fields["visible_to"].widget.attrs.pop("required", None)
 
