@@ -1,18 +1,25 @@
 {% block nav_item %}
-    {#  Renders a single navigation item (<li>) with:                                                   #}
-    {#      • label (string)  – the text displayed in the menu                                          #}
-    {#      • href  (string)  – the target URL (use {% url ... as var %} or pass a string)              #}
-    {#      • icon  (string)  – the FontAwesome icon class (e.g. "fas fa-home")                         #}
-    {#                                                                                                  #}
-    {#      Example:                                                                                    #}
-    {#         {% widget "widgets:nav_item" label="Dashboard" href=demo_url icon="fas fa-th-large" %}   #}
+    {#  Renders a single navigation item (<li>) with:                                                           #}
+    {#      • label (string)                  – the text displayed in the menu                                  #}
+    {#      • href  (string)                  – the target URL (use {% url ... as var %} or pass a string)      #}
+    {#      • icon  (string)                  – the FontAwesome icon class (e.g. "fas fa-home")                 #}
+    {#      • style_icon  (string, optional)  – the FontAwesome icon class (e.g. "fas")                         #}
+    {#                                                                                                          #}
+    {#      Example:                                                                                            #}
+    {#         {% widget "widgets:nav_item" label="Dashboard" href=demo_url icon="fas fa-th-large" %}           #}
+    {#         {% widget "widgets:nav_item" label="Dashboard" href=demo_url style_icon="fas" icon="user" %}     #}
 
     <li>
         <a href="{{ href }}"
            class="flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors duration-200"
            :class="{ 'justify-center': shouldCenter }"
         >
-            {% icons icon %}
+            {% if style_icon %}
+                {% icons icon style=style_icon %}
+            {% else %}
+                {% icons icon %}
+            {% endif %}
+
             <span x-show="sidebarExpanded || sidebarOpen"
                   x-transition:enter="transition-all ease-out duration-200 delay-75"
                   x-transition:enter-start="opacity-0 -translate-x-2"
@@ -122,4 +129,34 @@
             </template>
         </div>
     </li>
+{% endblock %}
+
+{% block menu-button-footer %}
+    {#  Renders a footer menu button (<a>) with:                                                                      #}
+    {#      • label (string)                – the text displayed next to the icon                                     #}
+    {#      • href (string)                 – the target URL (can use {% url ... as var %} or pass a string directly) #}
+    {#      • icon (string)                 – the icon name (e.g. "user")                                             #}
+    {#      • style_icon (string, optional) – the Font Awesome style (e.g. "fas", "fa-regular", "fab")                #}
+    {#      • custom (boolean, optional)    – If its Custom Icon or from Font-Awesome                                 #}
+    {#                                                                                                                #}
+    {#  Example usage:                                                                                                #}
+    {#      {% url "profile" as url %}                                                                                #}
+    {#      {% widget "widgets:menu-button-footer" label="Profile" href=url icon="user" %}                            #}
+    {#          -> <i class="fas fa-user"></i> Profile                                                                #}
+    {#                                                                                                                #}
+    {#      {% widget "widgets:menu-button-footer" label="Profile" href=url style_icon="fa-regular" icon="user" %}    #}
+    {#          -> <i class="fa-regular fa-user"></i> Profile                                                         #}
+
+    <a href="{{ href }}" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-200">
+
+        {% if style_icon %}
+            {% icons icon style=style_icon class="min-w-[20px]" %}
+        {% elif custom %}
+            {% icons icon custom=True class="min-w-[20px]" %}
+        {% else %}
+            {% icons icon class="min-w-[20px]" %}
+        {% endif %}
+
+        <span class="text-sm text-gray-700">{{ label }}</span>
+    </a>
 {% endblock %}

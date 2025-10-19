@@ -9,7 +9,27 @@ register = template.Library()
 
 _icons_cache = {}
 
-def normalize_svg(svg_text: str, classes: str = "", force_current_color: bool = True, strip_root_size: bool = True, force_inner_fill: bool = False) -> str:
+def normalize_svg(svg_text: str, classes: str = "", force_current_color: bool = True, strip_root_size: bool = True) -> str:
+    """
+        Normalize an SVG string for consistent rendering in templates.
+
+        This helper function applies optional transformations to an SVG file:
+          - Removes width and height attributes (for responsive scaling)
+          - Appends additional CSS classes to the <svg> element
+          - Forces `fill` and `stroke` attributes to use `currentColor` if not already set
+            (useful for theme/color inheritance)
+
+        Args:
+            svg_text (str): The raw SVG content as a string.
+            classes (str, optional): CSS classes to append to the root <svg> tag.
+            force_current_color (bool, optional): If True, sets fill and stroke to `currentColor`
+                if not already present.
+            strip_root_size (bool, optional): If True, removes width and height attributes
+                from the <svg> tag.
+
+        Returns:
+            str: A normalized SVG string safe to render in templates.
+    """
     if strip_root_size:
         svg_text = re.sub(r'\s(width|height)="[^"]*"', '', svg_text, flags=re.I)
 
@@ -28,6 +48,18 @@ def normalize_svg(svg_text: str, classes: str = "", force_current_color: bool = 
     return svg_text
 
 def get_svg_icon(name: str):
+    """
+        Load and cache an SVG icon by its name.
+
+        Looks up the icon in the Django staticfiles system under `icons/{name}.svg`.
+        If found, the content is cached to avoid repeated I/O.
+
+        Args:
+            name (str): The icon name without extension (e.g. "user" -> icons/user.svg).
+
+        Returns:
+            str or None: The SVG content (marked safe) if found, or None if not found.
+    """
     if name in _icons_cache:
         return _icons_cache[name]
 
@@ -41,6 +73,18 @@ def get_svg_icon(name: str):
 
 
 class IconNode(template.Node):
+    """
+        Template Node that renders either:
+          - A Font Awesome <i> tag (default)
+          - A custom SVG icon loaded from static files (when `custom=True`)
+
+        Supported attributes:
+            - name (str): Icon name (e.g. "user", "github").
+            - custom (bool): If True, renders SVG from `/static/icons/{name}.svg`.
+            - style (str): Font Awesome style class (default: "fas"). Examples: "fab", "far".
+            - class (str): Extra CSS classes to append to the icon.
+            - Any other attributes are rendered as HTML attributes on the <i> tag.
+    """
     def __init__(self, name_expr, attrs):
         self.name_expr = name_expr
         self.attrs = attrs
@@ -67,8 +111,7 @@ class IconNode(template.Node):
                     svg_text=svg,
                     classes=base_class,
                     force_current_color=True,
-                    strip_root_size=True,
-                    force_inner_fill=False
+                    strip_root_size=True
                 )
                 return mark_safe(svg)
 
@@ -108,15 +151,28 @@ class IconNode(template.Node):
 @register.tag(name="icons")
 def do_icon(parser, token):
     """
-    Uso:
-        {% icons "chevron-left" %}                       -> Font Awesome
-        {% icons "chevron-left" custom=True %}           -> SVG from Project
-        {% icons "github" style="fab" class="text-blue" %}
+       Django template tag to render icons using Font Awesome or custom SVG files.
+
+       Usage:
+           {% icons "chevron-left" %}
+               -> Renders a Font Awesome icon: <i class="fas fa-chevron-left"></i>
+
+           {% icons "chevron-left" custom=True %}
+               -> Renders custom SVG from static/icons/chevron-left.svg
+
+           {% icons "github" style="fab" class="text-blue" %}
+               -> Renders Font Awesome Brand icon with extra class
+
+       Raises:
+           TemplateSyntaxError: If the icon name is missing or arguments are malformed.
+
+       Returns:
+           IconNode: A Django template Node ready to render.
     """
     bits = token.split_contents()
     tag_name = bits.pop(0)
     if not bits:
-        raise template.TemplateSyntaxError(f'"{tag_name}" requer ao menos o nome do ícone.')
+        raise template.TemplateSyntaxError(f'"{tag_name}" requires at least the name of the icon.')
 
     name_expr = parser.compile_filter(bits.pop(0))
 
@@ -124,7 +180,7 @@ def do_icon(parser, token):
     for bit in bits:
         if "=" not in bit:
             raise template.TemplateSyntaxError(
-                f'Argumento inválido em {tag_name}: "{bit}". Use key="value".'
+                f'Invalid argument in {tag_name}: "{bit}". Use key="value".'
             )
         key, value = bit.split("=", 1)
         attrs[key] = parser.compile_filter(value)
